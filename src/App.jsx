@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config'
+
 import Login from './pages/Login'
 import Main from './pages/Main'
 import NotFound from './pages/NotFound'
@@ -40,33 +41,29 @@ export default function App () {
         <Route
           path='/logged-in'
           element={
-            <Main currentUser={currentUser} logOut={logOut} users={users} />
+            <Main
+              currentUser={currentUser}
+              logOut={logOut}
+              users={users}
+              setModal={setModal}
+              modal={modal}
+            />
           }
         />
         <Route
           path='/logged-in/:conversationId'
           element={
-            <Main currentUser={currentUser} logOut={logOut} users={users} />
+            <Main
+              modal={modal}
+              currentUser={currentUser}
+              logOut={logOut}
+              users={users}
+              setModal={setModal}
+            />
           }
         />
         <Route path='*' element={<NotFound />} />
       </Routes>
-
-      {modal === 'new-user' ? (
-        <div className='modal-wrapper'>
-          <div className='modal'>
-            <h1>New user modal</h1>
-          </div>
-        </div>
-      ) : null}
-
-      {modal === 'something-else' ? (
-        <div className='modal-wrapper'>
-          <div className='modal'>
-            <h1>Something else</h1>
-          </div>
-        </div>
-      ) : null}
     </div>
   )
 }
