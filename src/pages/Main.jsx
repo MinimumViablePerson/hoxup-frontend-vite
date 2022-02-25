@@ -1,66 +1,65 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { API_URL } from '../../config'
 
-function Main({ currentUser, logOut, users }) {
-  const [currentConversation, setCurrentConversation] = useState(null);
-  const [conversations, setConversations] = useState([]);
-  const params = useParams();
-  const navigate = useNavigate();
+function Main ({ currentUser, logOut, users }) {
+  const [currentConversation, setCurrentConversation] = useState(null)
+  const [conversations, setConversations] = useState([])
+  const params = useParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (currentUser === null) navigate("/");
-  }, [currentUser, navigate]);
+    if (currentUser === null) navigate('/')
+  }, [currentUser, navigate])
 
   useEffect(() => {
     if (params.conversationId) {
-      fetch(
-        `http://localhost:4000/conversations/${params.conversationId}?_embed=messages`
-      )
-        .then((resp) => resp.json())
-        .then((conversation) => setCurrentConversation(conversation));
+      fetch(`${API_URL}/conversations/${params.conversationId}?_embed=messages`)
+        .then(resp => resp.json())
+        .then(conversation => setCurrentConversation(conversation))
     }
-  }, [params.conversationId]);
+  }, [params.conversationId])
 
   useEffect(() => {
-    if (currentUser === null) return;
+    if (currentUser === null) return
 
-    fetch(`http://localhost:4000/conversations?userId=${currentUser.id}`)
-      .then((resp) => resp.json())
-      .then((conversations) => setConversations(conversations));
-  }, [currentUser]);
+    fetch(`${API_URL}/conversations?userId=${currentUser.id}`)
+      .then(resp => resp.json())
+      .then(conversations => setConversations(conversations))
+  }, [currentUser])
 
-  if (currentUser === null) return <h1>Not signed in...</h1>;
+  if (currentUser === null) return <h1>Not signed in...</h1>
 
   return (
-    <div className="main-wrapper">
+    <div className='main-wrapper'>
       <aside>
         {/* <!-- Side Header --> */}
-        <header className="panel">
+        <header className='panel'>
           <img
-            className="avatar"
-            width="50"
-            height="50"
+            className='avatar'
+            width='50'
+            height='50'
             src={currentUser.avatar}
-            alt=""
+            alt=''
           />
           <h3>{currentUser.firstName}</h3>
           <button onClick={() => logOut()}>LOG OUT</button>
         </header>
 
         {/* <!-- Search form --> */}
-        <form className="aside__search-container">
+        <form className='aside__search-container'>
           <input
-            type="search"
-            name="messagesSearch"
-            placeholder="Search chats"
-            value=""
+            type='search'
+            name='messagesSearch'
+            placeholder='Search chats'
+            value=''
           />
         </form>
 
         <ul>
           {/* <!-- This first item should always be present --> */}
           <li>
-            <button className="chat-button">
+            <button className='chat-button'>
               <div>
                 <h3>+ Start a new Chat</h3>
               </div>
@@ -68,25 +67,25 @@ function Main({ currentUser, logOut, users }) {
           </li>
 
           {conversations.map(({ participantId, userId, id }) => {
-            const isCurrentUserSameAsUserId = currentUser.id === userId;
+            const isCurrentUserSameAsUserId = currentUser.id === userId
 
             const talkingToId = isCurrentUserSameAsUserId
               ? participantId
-              : userId;
+              : userId
 
-            const talkingToUser = users.find((user) => user.id === talkingToId);
+            const talkingToUser = users.find(user => user.id === talkingToId)
 
             return (
               <li>
                 <button
-                  className="chat-button"
+                  className='chat-button'
                   onClick={() => navigate(`/logged-in/${id}`)}
                 >
                   <img
-                    className="avatar"
-                    height="50"
-                    width="50"
-                    alt=""
+                    className='avatar'
+                    height='50'
+                    width='50'
+                    alt=''
                     src={talkingToUser.avatar}
                   />
                   <div>
@@ -97,7 +96,7 @@ function Main({ currentUser, logOut, users }) {
                   </div>
                 </button>
               </li>
-            );
+            )
           })}
         </ul>
       </aside>
@@ -105,17 +104,17 @@ function Main({ currentUser, logOut, users }) {
       {/* <!-- Main Chat Section --> */}
 
       {params.conversationId ? (
-        <main className="conversation">
+        <main className='conversation'>
           {/* <!-- Chat header --> */}
-          <header className="panel"></header>
+          <header className='panel'></header>
 
           {/* <!-- 
 
       The Messages List will go here. Check main-messages-list.html
      --> */}
 
-          <ul className="conversation__messages">
-            <li className="outgoing">
+          <ul className='conversation__messages'>
+            <li className='outgoing'>
               <p>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus
                 excepturi non odit quisquam et assumenda suscipit maxime
@@ -125,7 +124,7 @@ function Main({ currentUser, logOut, users }) {
             </li>
 
             {/* <!-- Outgoing messages are messages sent by the current logged in user --> */}
-            <li className="outgoing">
+            <li className='outgoing'>
               <p>Lorem ipsum...</p>
             </li>
             {/* <!--  --> */}
@@ -140,16 +139,16 @@ function Main({ currentUser, logOut, users }) {
             </li>
 
             {/* <!--  --> */}
-            <li className="outgoing">
+            <li className='outgoing'>
               <p>Some test message</p>
             </li>
-            <li className="outgoing">
+            <li className='outgoing'>
               <p>more messagesss!!!</p>
             </li>
-            <li className="outgoing">
+            <li className='outgoing'>
               <p>more messagesss!!!</p>
             </li>
-            <li className="outgoing">
+            <li className='outgoing'>
               <p>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus
                 excepturi non odit quisquam et assumenda suscipit maxime
@@ -179,24 +178,24 @@ function Main({ currentUser, logOut, users }) {
               </p>
             </li>
             <li>Cool</li>
-            <li className="outgoing">Cool!!!</li>
+            <li className='outgoing'>Cool!!!</li>
           </ul>
 
           {/* <!-- Message Box --> */}
           <footer>
-            <form className="panel conversation__message-box">
-              <input type="text" placeholder="Type a message" value="" />
-              <button type="submit">
+            <form className='panel conversation__message-box'>
+              <input type='text' placeholder='Type a message' value='' />
+              <button type='submit'>
                 {/* <!-- This is the send button --> */}
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  height="24"
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 24 24'
+                  width='24'
+                  height='24'
                 >
                   <path
-                    fill="currentColor"
-                    d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"
+                    fill='currentColor'
+                    d='M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z'
                   ></path>
                 </svg>
               </button>
@@ -205,7 +204,7 @@ function Main({ currentUser, logOut, users }) {
         </main>
       ) : null}
     </div>
-  );
+  )
 }
 
-export default Main;
+export default Main
